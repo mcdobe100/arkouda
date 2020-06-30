@@ -2,8 +2,8 @@ use TestBase;
 
 use ArraySetops;
 
-config const NINPUTS = 100_000_000;
-config const MAX_VAL = 5000;
+config const NINPUTS = 5_000;
+config const MAX_VAL = 5_000;
 
 proc testIntersect1d(n:int) {
   var d: Diags;
@@ -58,15 +58,14 @@ proc testUnion1d(n:int) {
 }
 
 proc main() {
-  const (elapsed, nbytes) = testIntersect1d(NINPUTS);
+  const (elapsedIntersect, nbytes) = testIntersect1d(NINPUTS);
   const (elapsedDiff, _) = testSetDiff1d(NINPUTS);
   const (elapsedXor, _) = testSetXor1d(NINPUTS);
   const (elapsedUnion, _) = testUnion1d(NINPUTS);
 
   const MB:real = byteToMB(nbytes:real);
   if printTimes {
-    writeln("intersect1d on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(NINPUTS, MB, elapsed, MB/elapsed))
-;
+    writeln("intersect1d on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(NINPUTS, MB, elapsedIntersect, MB/elapsedIntersect));
     writeln("setdiff1d on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(NINPUTS, MB, elapsedDiff, MB/elapsedDiff));
     writeln("setxor1d on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(NINPUTS, MB, elapsedXor, MB/elapsedXor));
     writeln("union1d on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(NINPUTS, MB, elapsedUnion, MB/elapsedUnion));
