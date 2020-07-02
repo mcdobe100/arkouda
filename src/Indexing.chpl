@@ -58,4 +58,32 @@ module Indexing {
 
       return ret;
     }
+
+    proc sliceTest(ea: [] ?t, aa: [] t, start:int, stop:int) throws {
+      var slice = start..(stop-1);
+      forall (elt,j) in zip(aa, slice) with (var agg = newSrcAggregator(t)) {
+        agg.copy(elt,ea[j]);
+      }
+      return aa;
+    }
+
+    proc bulkTest(a: [] ?t, b: [] t, start: int, stop: int) {
+      var slice: range(stridable=true);
+      
+      slice = start..(stop-1);
+
+      b = a[slice];
+
+      return b;
+    }
+
+    proc curlyTest(a: [] ?t, b: [] t, start: int, stop: int) {
+      var slice: range(stridable=true);
+      
+      slice = start..(stop-1);
+
+      b = a[{slice}];
+
+      return b;
+    }
 }
