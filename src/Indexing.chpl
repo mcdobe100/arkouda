@@ -78,9 +78,8 @@ module Indexing {
     }
 
     proc curlyTest(a: [] ?t, b: [] t, start: int, stop: int, stride=1) {
-      //var slice: range(stridable=true);
-      
-      var slice = start..(stop-1) by stride;
+      var slice: range(stridable=true);
+      slice = start..(stop-1) by stride;
 
       b = a[{slice}];
 
