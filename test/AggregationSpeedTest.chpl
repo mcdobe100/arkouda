@@ -6,49 +6,46 @@ use Random;
 
 config const ARRSIZE = 100_000_000;
 config const START = 0;
-config const STOP = ARRSIZE/2;
+config const STOP = ARRSIZE;
 
-proc testAggregation(n:int, size=8) {
+proc testAggregation(orig: [] int, n:int) {
   var d: Diags;
-  var orig = makeDistArray(n, int);
-  Random.fillRandom(orig);
   var copy = makeDistArray(STOP-START, int);
   d.start();
   copy = sliceTest(orig, copy, START, STOP);
   d.stop(printTime=false);
 
-  return (d.elapsed(), n*size);
+  return d.elapsed();
 }
 
-proc testBulk(n:int, size=8) {
+proc testBulk(orig: [] int, n:int, size=8) {
   var d: Diags;
-  var orig = makeDistArray(n, int);
-  Random.fillRandom(orig);
   var copy = makeDistArray(STOP-START, int);
   d.start();
   copy = bulkTest(orig, copy, START, STOP);
   d.stop(printTime=false);
 
-  return (d.elapsed(), n*size);  
+  return d.elapsed();  
 }
 
-proc testCurly(n:int, size=8) {
+proc testCurly(orig: [] int, n:int) {
   var d: Diags;
-  var orig = makeDistArray(n, int);
-  Random.fillRandom(orig);
   var copy = makeDistArray(STOP-START, int);
   d.start();
   copy = curlyTest(orig, copy, START, STOP);
   d.stop(printTime=false);
 
-  return (d.elapsed(), n*size);  
+  return d.elapsed();  
 }
 
 proc main() {
-  const (elapsed, nbytes) = testAggregation(ARRSIZE);
-  const (elapsedBulk, _) = testBulk(ARRSIZE);
-  const (elapsedCurly, _) = testCurly(ARRSIZE);
-  const MB = byteToMB(nbytes);
+  var orig = makeDistArray(ARRSIZE, int);
+  Random.fillRandom(orig);
+
+  const elapsed = testAggregation(orig, ARRSIZE);
+  const elapsedBulk  = testBulk(orig, ARRSIZE);
+  const elapsedCurly = testCurly(orig, ARRSIZE);
+  const MB = byteToMB(8.0*ARRSIZE);
   if printTimes {
     writeln("Aggregated %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(ARRSIZE, MB, elapsed, MB/elapsed));
     writeln("Bulk copied %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)\n".format(ARRSIZE, MB, elapsedBulk, MB/elapsedBulk));
