@@ -7,22 +7,23 @@ use Random;
 config const ARRSIZE = 100_000_000;
 config const START = 0;
 config const STOP = ARRSIZE;
+config const STRIDE = -1;
 
 proc testAggregation(orig: [] int, n:int) {
   var d: Diags;
-  var copy = makeDistArray(STOP-START, int);
+  var copy = makeDistArray((STOP-START), int);
   d.start();
-  copy = sliceTest(orig, copy, START, STOP);
+  copy = sliceTest(orig, copy, START, STOP, STRIDE);
   d.stop(printTime=false);
 
   return d.elapsed();
 }
 
-proc testBulk(orig: [] int, n:int, size=8) {
+proc testBulk(orig: [] int, n:int) {
   var d: Diags;
-  var copy = makeDistArray(STOP-START, int);
+  var copy = makeDistArray((STOP-START), int);
   d.start();
-  copy = bulkTest(orig, copy, START, STOP);
+  copy = bulkTest(orig, copy, START, STOP, STRIDE);
   d.stop(printTime=false);
 
   return d.elapsed();  
@@ -32,7 +33,7 @@ proc testCurly(orig: [] int, n:int) {
   var d: Diags;
   var copy = makeDistArray(STOP-START, int);
   d.start();
-  copy = curlyTest(orig, copy, START, STOP);
+  copy = curlyTest(orig, copy, START, STOP, STRIDE);
   d.stop(printTime=false);
 
   return d.elapsed();  
