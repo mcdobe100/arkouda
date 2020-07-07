@@ -44,9 +44,7 @@ module ArraySetops
     proc intersect1dHelper(a: [] ?t, b: [] t) {
       var aux = radixSortLSD_keys(concatset(a,b));
 
-      //const maskInds = aux.domain#(aux.size-1);  // maskInds describes all indices but the last
-      var mask: [aux.domain] bool;// = [i in maskInds] aux.localAccess(i) == aux.localAccess(i+1);
-
+      var mask: [aux.domain] bool;
       coforall loc in Locales do
         on loc {
           var localDom = aux.localSubdomain();
