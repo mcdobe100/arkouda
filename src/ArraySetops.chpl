@@ -45,7 +45,7 @@ module ArraySetops
       var aux = radixSortLSD_keys(concatset(a,b));
 
       const maskInds = aux.domain#(aux.size-1);  // maskInds describes all indices but the last
-      var mask = [i in maskInds] aux[i] == aux[i+1];
+      var mask = [i in maskInds] aux.localAccess(i) == aux.localAccess(i+1);
       
       var int1d = boolIndexer(aux[maskInds], mask);
 
