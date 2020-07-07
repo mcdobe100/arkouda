@@ -44,10 +44,10 @@ module ArraySetops
     proc intersect1dHelper(a: [] ?t, b: [] t) {
       var aux = radixSortLSD_keys(concatset(a,b));
 
-      var head = sliceHead(aux);
-      var mask = head == sliceTail(aux);
+      const maskInds = aux.domain#(aux.size-1);  // maskInds describes all indices but the last
+      var mask = [i in maskInds] aux[i] == aux[i+1];
       
-      var int1d = boolIndexer(head, mask);
+      var int1d = boolIndexer(aux[maskInds], mask);
 
       return int1d;
     }
