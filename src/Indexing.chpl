@@ -36,7 +36,7 @@ module Indexing {
     }
 
     // return an array of all values from array a whose index corresponds to a true value in array truth
-    proc boolIndexer(a: [?aD] ?t, truth: [aD] bool) {
+    proc boolIndexer(a: [] ?t, truth: [] bool) {
         var iv: [truth.domain] int = (+ scan truth);
         var pop = iv[iv.size-1];
         var ret = makeDistArray(pop, int);
