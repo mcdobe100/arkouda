@@ -36,7 +36,7 @@ module ArraySetops
       }
       return intersect1dHelper(a,b);
     }
-
+    
     // Get intersect of 2 arrays
     // first concatenates the 2 arrays, then
     // sorts arrays and removes all values that
@@ -126,19 +126,22 @@ module ArraySetops
 
         return ret;
     }
-    
+
     // Gets union of 2 arrays
     // first concatenates the 2 arrays, then
     // sorts resulting array and ensures that
     // values are unique
     proc union1d(a: [] int, b: [] int) {
-      var a1  = uniqueSort(a, false);
-      var b1  = uniqueSort(b, false);
-
-      var aux = concatset(a1, b1);
+      var aux;
+      // create a temporary scope to clean up temp arrays
+      {
+        var a1  = uniqueSort(a, false);
+        var b1  = uniqueSort(b, false);
+        aux = concatset(a1, b1);
+      }
 
       var ret = uniqueSort(aux, false);
       
       return ret;
-    }
+    }    
 }
