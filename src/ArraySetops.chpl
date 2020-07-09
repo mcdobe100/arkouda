@@ -53,8 +53,6 @@ module ArraySetops
           forall i in maskIndices {
             mask[i] = aux.localAccess[i] == aux.localAccess[i+1];
           }
-          if(localDom.high != aux.domain.high) then
-            mask[localDom.high] = aux.localAccess[localDom.high] == aux[localDom.high + 1];
         }
       
       var int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
@@ -89,7 +87,7 @@ module ArraySetops
       flag[{1..#(sliceComp.size)}] = sliceComp;
       flag[sliceComp.size + 1] = true;
 
-      var mask = flag[flag.domain.interior(flag.domain.size-1)] & flag[flag.domain#(aux.domain.size-1)];
+      var mask = sliceHead(flag) & sliceTail(flag);//flag[flag.domain.interior(flag.domain.size-1)] & flag[flag.domain#(aux.domain.size-1)];
 
       var ret = boolIndexer(aux, mask);
 
