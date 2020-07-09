@@ -87,7 +87,7 @@ module ArraySetops
       flag[{1..#(sliceComp.size)}] = sliceComp;
       flag[sliceComp.size + 1] = true;
 
-      var mask = sliceHead(flag) & sliceTail(flag);//flag[flag.domain.interior(flag.domain.size-1)] & flag[flag.domain#(aux.domain.size-1)];
+      var mask = sliceHead(flag) & sliceTail(flag);
 
       var ret = boolIndexer(aux, mask);
 
