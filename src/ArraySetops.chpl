@@ -58,7 +58,7 @@ module ArraySetops
         }
       
       var int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
-
+      
       return int1d;
     }
 
@@ -142,7 +142,7 @@ module ArraySetops
       }
 
       var ret = uniqueSort(aux, false);
-      
+
       return ret;
-    }    
+    }
 }
