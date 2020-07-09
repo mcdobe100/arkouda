@@ -5,8 +5,8 @@ use Math;
 use Random;
 
 config const ARRSIZE = 1_000_000_000;
-config const START = 0;
-config const STOP = ARRSIZE/3;
+config const START = ARRSIZE/3;
+config const STOP = (2*ARRSIZE)/3;
 config const STRIDE = 1;
 
 proc testAggregation(orig: [] int, n:int, start: int, stop: int, stride: int) {
