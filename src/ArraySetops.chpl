@@ -52,11 +52,12 @@ module ArraySetops
           const localDom = aux.localSubdomain();
           writeln("LOCAL DOM HIGH: ", localDom.high);
           writeln("MASK HIGH: ", mask.domain.high);
-          const maskIndices = localDom#(localDom.size-2);
+          const maskIndices = localDom#(localDom.size-1);
           forall i in maskIndices {
             mask[i] = aux.localAccess[i] == aux.localAccess[i+1];
           }
-          //mask[localDom.high-1] = aux.localAccess[localDom.high] == aux[localDom.high - 1];
+          if localDom.high != aux.domain.high then
+            mask[localDom.high] = aux.localAccess[localDom.high] == aux[localDom.high + 1];
         }
       
       const int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
