@@ -46,16 +46,20 @@ module ArraySetops
       var aux = radixSortLSD_keys(concatset(a,b));
 
       var mask: [aux.domain] bool;
+
       coforall loc in Locales do
         on loc {
-          var localDom = aux.localSubdomain();
-          const maskIndices = localDom#(localDom.size-1);
+          const localDom = aux.localSubdomain();
+          writeln("LOCAL DOM HIGH: ", localDom.high);
+          writeln("MASK HIGH: ", mask.domain.high);
+          const maskIndices = localDom#(localDom.size-2);
           forall i in maskIndices {
             mask[i] = aux.localAccess[i] == aux.localAccess[i+1];
           }
+          //mask[localDom.high-1] = aux.localAccess[localDom.high] == aux[localDom.high - 1];
         }
       
-      var int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
+      const int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
       
       return int1d;
     }
