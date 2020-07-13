@@ -50,8 +50,6 @@ module ArraySetops
       coforall loc in Locales do
         on loc {
           const localDom = aux.localSubdomain();
-          writeln("LOCAL DOM HIGH: ", localDom.high);
-          writeln("MASK HIGH: ", mask.domain.high);
           const maskIndices = localDom#(localDom.size-1);
           forall i in maskIndices {
             mask[i] = aux.localAccess[i] == aux.localAccess[i+1];
