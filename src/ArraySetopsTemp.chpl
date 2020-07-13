@@ -14,6 +14,7 @@ module ArraySetopsTemp
     use Unique;
     use Indexing;
     use In1d;
+    use Memory;
 
 
     /*
@@ -43,11 +44,14 @@ module ArraySetopsTemp
     proc intersect1dHelperold(a: [] ?t, b: [] t) {
       var aux = radixSortLSD_keys(concatset(a,b));
 
-      var head = sliceHead(aux);
-      var mask = head == sliceTail(aux);
-      
-      var int1d = boolIndexer(head, mask);
+      var mask: [aux.domain] bool;
+      var maskIndices = aux.domain#(aux.size-1);
 
+      forall i in maskIndices {
+        mask[i] = aux[i] == aux[i+1];
+      }
+      
+      const int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
       return int1d;
     }
     
@@ -81,7 +85,7 @@ module ArraySetopsTemp
       var mask = sliceTail(flag) & sliceHead(flag);
 
       var ret = boolIndexer(aux, mask);
-
+      writeln("Old memory usage setxor1d: ", Memory.memoryUsed());
       return ret;
     }
 
@@ -128,7 +132,6 @@ module ArraySetopsTemp
       var aux = concatset(a1, b1);
 
       var ret = uniqueSort(aux, false);
-      
       return ret;
     }
 }
