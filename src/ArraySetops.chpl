@@ -57,7 +57,7 @@ module ArraySetops
       if (!assume_unique) {
         var a1  = uniqueSort(a, false);
         var b1  = uniqueSort(b, false);
-        return intersect1dHelper(a1, b1);
+        return intersect1dHelperperloc(a1, b1);
       }
       return intersect1dHelperperloc(a,b);
     }
@@ -87,17 +87,22 @@ module ArraySetops
       if (!assume_unique) {
         var a1  = uniqueSort(a, false);
         var b1  = uniqueSort(b, false);
-        return intersect1dHelper(a1, b1);
+        return intersect1dHelperoneline(a1, b1);
       }
       return intersect1dHelperoneline(a,b);
     }
-    proc intersect1dHelperoneline(a: [] ?t, b: [] t) {
+    proc intersect1dHelperoneline(a: [?D] ?t, b: [] t) {
       var aux = radixSortLSD_keys(concatset(a,b));
 
-      var head = aux[aux.domain#(aux.size-1)];
-      var mask = head == aux[aux.domain.interior(aux.size-1)];
+      const ref head = aux[..D.high-1];
+      const ref tail = aux[D.low+1..];
+      var mask = head == tail;
       
-      var int1d = boolIndexer(head, mask);
+      var int1d;
+      // Arti
+      {
+        int1d = boolIndexer(aux[..D.high-1], mask);
+      }
 
       writeln("memory at helper one line: ", Memory.memoryUsed());
       return int1d;
