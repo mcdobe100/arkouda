@@ -14,7 +14,7 @@ module ArraySetops
     use Unique;
     use Indexing;
     use In1d;
-
+    use Memory;
 
     /*
     Small bound const. Brute force in1d implementation recommended.
@@ -49,6 +49,7 @@ module ArraySetops
       
       var int1d = boolIndexer(head, mask);
 
+      writeln("Memory used master: ", Memory.memoryUsed());
       return int1d;
     }
 
@@ -78,10 +79,37 @@ module ArraySetops
         }
       
       const int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
-      
+      writeln("memory at helper per loc: ", Memory.memoryUsed());
       return int1d;
     }
 
+    proc intersect1doneline(a,b,assume_unique) {
+      if (!assume_unique) {
+        var a1  = uniqueSort(a, false);
+        var b1  = uniqueSort(b, false);
+        return intersect1dHelper(a1, b1);
+      }
+      return intersect1dHelperoneline(a,b);
+    }
+    proc intersect1dHelperoneline(a: [] ?t, b: [] t) {
+      var aux = radixSortLSD_keys(concatset(a,b));
+
+      var head = aux[aux.domain#(aux.size-1)];
+      var mask = head == aux[aux.domain.interior(aux.size-1)];
+      
+      var int1d = boolIndexer(head, mask);
+
+      writeln("memory at helper one line: ", Memory.memoryUsed());
+      return int1d;
+    }
+
+
+
+
+
+
+
+    
     // returns the exclusive-or of 2 arrays
     proc setxor1d(a: [] int, b: [] int, assume_unique: bool) {
       //if not unique, unique sort arrays then perform operation
