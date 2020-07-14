@@ -1,6 +1,6 @@
 use TestBase;
 
-use ArraySetops;
+use Indexing;
 
 config const NINPUTS = 10_000;
 config const MAX_VAL = 50_000;
@@ -9,7 +9,7 @@ proc testold(a,b) {
   var d: Diags;
 
   d.start();
-  var xor =setxor1d(a,b,false);
+  var xor =concatset(a,b);
   d.stop(printTime=false);
   return (d.elapsed(), xor);
 }
@@ -18,7 +18,7 @@ proc testnew(a,b) {
   var d: Diags;
 
   d.start();
-  var xor = setxor1dnew(a,b,false);
+  var xor = concatsetnew(a,b);
   d.stop(printTime=false);
   return (d.elapsed(), xor);
 }
@@ -36,7 +36,7 @@ proc main() {
   
   const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {
-    writeln("old xor on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedOld, MB/elapsedOld));
-    writeln("new xor on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedNew, MB/elapsedNew));
+    writeln("old concat on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedOld, MB/elapsedOld));
+    writeln("new concat on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedNew, MB/elapsedNew));
   }
 }

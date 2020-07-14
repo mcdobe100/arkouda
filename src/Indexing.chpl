@@ -58,4 +58,23 @@ module Indexing {
 
       return ret;
     }
+
+    proc concatsetnew(a: [?aD] ?t, b: [?bD] t) {
+      var ret = makeDistArray((a.size + b.size), t);
+
+      if (aD == bD) {
+        writeln("in new case");
+        forall i in aD {
+          ret[i] = a[i];
+          ret[i+aD.size] = b[i];
+        }
+        return ret;
+      }
+      
+      ret[{0..#a.size}] = a;
+      ret[{a.size..#b.size}] = b;
+
+      return ret;
+    }
+
 }
