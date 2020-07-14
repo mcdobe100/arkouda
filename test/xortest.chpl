@@ -9,7 +9,7 @@ proc testold(a,b) {
   var d: Diags;
 
   d.start();
-  var xor = setxor1d(a,b,false);
+  var xor =setxor1d(a,b,false);
   d.stop(printTime=false);
   return (d.elapsed(), xor);
 }

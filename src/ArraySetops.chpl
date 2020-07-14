@@ -69,6 +69,7 @@ module ArraySetops
     // more than once
     proc setxor1dHelper(a: [] ?t, b: [] t) {
       writeln("old start: ", Memory.memoryUsed());
+      var memStart = Memory.memoryUsed();
       var aux = radixSortLSD_keys(concatset(a,b));
 
       var sliceComp = sliceTail(aux) != sliceHead(aux);
@@ -84,7 +85,8 @@ module ArraySetops
 
       var ret = boolIndexer(aux, mask);
 
-      writeln("old end: ", Memory.memoryUsed());
+      var memEnd = Memory.memoryUsed();
+      writeln("old end: ", memEnd - memStart);
       return ret;
     }
 
@@ -104,22 +106,25 @@ module ArraySetops
     // more than once
     proc setxor1dHelpernew(a: [] ?t, b: [] t) {
       writeln("new start: ", Memory.memoryUsed());
-      var aux = radixSortLSD_keys(concatset(a,b));
-      var D = aux.domain;
+      const memStart = Memory.memoryUsed();
+      const aux = radixSortLSD_keys(concatset(a,b));
+      const D = aux.domain;
 
-      var sliceComp = aux[..D.high-1] != aux[D.low+1..];
+      const sliceComp = aux[..D.high-1] != aux[D.low+1..];
       
       // Concatenate a `true` onto each end of the array
       var flag = makeDistArray((sliceComp.size + 2), bool);
+      const fD = flag.domain;
       
-      flag[0] = true;
-      flag[{1..#(sliceComp.size)}] = sliceComp;
-      flag[sliceComp.size + 1] = true;
+      flag[fD.low] = true;
+      flag[fD.low+1..#fD.high-1] = sliceComp;
+      flag[fD.high] = true;
 
       var mask = sliceTail(flag) & sliceHead(flag);
 
       var ret = boolIndexer(aux, mask);
-      writeln("new end: ", Memory.memoryUsed());
+      const memEnd = Memory.memoryUsed();
+      writeln("new end: ", memEnd-memStart);
       return ret;
     }    
     
