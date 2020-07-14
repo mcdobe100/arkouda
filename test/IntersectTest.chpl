@@ -51,7 +51,8 @@ proc main() {
 
   const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {
-    writeln("intersect per loc on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedIntersect, MB/elapsedIntersect));
-    writeln("intersect one line on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedIntersect2, MB/elapsedIntersect2));
+    writeln("intersect current master on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedIntersect, MB/elapsedIntersect));
+    writeln("intersect with refs on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedIntersect2, MB/elapsedIntersect2));
+    writeln("intersect with scope on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedIntersect2, MB/elapsedIntersect2));
   }
 }
