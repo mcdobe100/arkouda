@@ -46,7 +46,7 @@ proc testIntersect1doneline(n:int) {
 
 proc main() {
   const elapsedIntersect = testIntersect1d(NINPUTS);
-  //const elapsedIntersect1 = testIntersect1dold(NINPUTS);
+  const elapsedIntersect1 = testIntersect1dold(NINPUTS);
   const elapsedIntersect2 = testIntersect1doneline(NINPUTS);
 
   const MB:real = byteToMB(NINPUTS*8.0);

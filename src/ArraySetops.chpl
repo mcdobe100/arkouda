@@ -62,7 +62,7 @@ module ArraySetops
       return intersect1dHelperperloc(a,b);
     }
 
-    proc intersect1dHelperperloc(a,b) {
+    /*    proc intersect1dHelperperloc(a,b) {
       var aux = radixSortLSD_keys(concatset(a,b));
 
       var mask: [aux.domain] bool;
@@ -80,6 +80,20 @@ module ArraySetops
       
       const int1d = boolIndexer(aux[aux.domain#(aux.size-1)], mask);
       writeln("memory at helper per loc: ", Memory.memoryUsed());
+      return int1d;
+      }*/
+
+    proc intersect1dHelperperloc(a: [?D] ?t,b) {
+      var aux = radixSortLSD_keys(concatset(a,b));
+
+      const ref head = aux[..D.high-1];
+      const ref tail = aux[D.low+1..];
+      const mask = head == tail;
+      
+      const int1d;
+      int1d = boolIndexer(head, mask);
+
+      writeln("memory at helper no scope: ", Memory.memoryUsed());
       return int1d;
     }
 
