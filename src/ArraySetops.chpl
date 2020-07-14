@@ -14,7 +14,7 @@ module ArraySetops
     use Unique;
     use Indexing;
     use In1d;
-
+    use Memory;
 
     /*
     Small bound const. Brute force in1d implementation recommended.
@@ -68,6 +68,7 @@ module ArraySetops
     // sorts and removes all values that occur
     // more than once
     proc setxor1dHelper(a: [] ?t, b: [] t) {
+      writeln("old start: ", Memory.memoryUsed());
       var aux = radixSortLSD_keys(concatset(a,b));
 
       var sliceComp = sliceTail(aux) != sliceHead(aux);
@@ -83,9 +84,45 @@ module ArraySetops
 
       var ret = boolIndexer(aux, mask);
 
+      writeln("old end: ", Memory.memoryUsed());
       return ret;
     }
 
+    proc setxor1dnew(a: [] int, b: [] int, assume_unique: bool) {
+      //if not unique, unique sort arrays then perform operation
+      if (!assume_unique) {
+        var a1  = uniqueSort(a, false);
+        var b1  = uniqueSort(b, false);
+        return  setxor1dHelpernew(a1, b1);
+      }
+      return setxor1dHelpernew(a,b);
+    }
+
+    // Gets xor of 2 arrays
+    // first concatenates the 2 arrays, then
+    // sorts and removes all values that occur
+    // more than once
+    proc setxor1dHelpernew(a: [] ?t, b: [] t) {
+      writeln("new start: ", Memory.memoryUsed());
+      var aux = radixSortLSD_keys(concatset(a,b));
+      var D = aux.domain;
+
+      var sliceComp = aux[..D.high-1] != aux[D.low+1..];
+      
+      // Concatenate a `true` onto each end of the array
+      var flag = makeDistArray((sliceComp.size + 2), bool);
+      
+      flag[0] = true;
+      flag[{1..#(sliceComp.size)}] = sliceComp;
+      flag[sliceComp.size + 1] = true;
+
+      var mask = sliceTail(flag) & sliceHead(flag);
+
+      var ret = boolIndexer(aux, mask);
+      writeln("new end: ", Memory.memoryUsed());
+      return ret;
+    }    
+    
     // returns the set difference of 2 arrays
     proc setdiff1d(a: [] int, b: [] int, assume_unique: bool) {
       //if not unique, unique sort arrays then perform operation
