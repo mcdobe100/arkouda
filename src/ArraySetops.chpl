@@ -120,7 +120,8 @@ module ArraySetops
       flag[fD.low+1..#fD.high-1] = sliceComp;
       flag[fD.high] = true;
 
-      var mask = sliceTail(flag) & sliceHead(flag);
+      var mask;
+      {mask = sliceTail(flag) & sliceHead(flag);}
 
       var ret = boolIndexer(aux, mask);
       const memEnd = Memory.memoryUsed();
