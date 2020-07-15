@@ -48,13 +48,13 @@ proc main() {
   assert(oldval.equals(newval));
 
   var oldSum = 0.0;
-  forall i in 0..#TRIALS with (+ reduce oldSum) {
+  for i in 0..#TRIALS {
     oldSum += testold(a,b);
   }
   const elapsedOldavg = oldSum/TRIALS;
 
   var newSum = 0.0;
-  forall i in 0..#TRIALS with (+ reduce newSum) {
+  for i in 0..#TRIALS {
     newSum += testnew(a,b);
   }
   const elapsedNewavg = newSum/TRIALS;
