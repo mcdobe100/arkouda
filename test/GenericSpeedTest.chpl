@@ -40,12 +40,8 @@ proc main() {
   fillInt(a, 0, MAX_VAL);
   fillInt(b, 0, MAX_VAL);
 
-  // run warmup tests
+  // run warmup test
   const oldval = testold(a,b,true);
-  const newval = testnew(a,b,true);
-
-  // check correctness
-  assert(oldval.equals(newval));
 
   var oldSum = 0.0;
   for i in 0..#TRIALS {
@@ -53,12 +49,17 @@ proc main() {
   }
   const elapsedOldavg = oldSum/TRIALS;
 
+  // run warmup test
+  const newval = testnew(a,b,true);
+  
   var newSum = 0.0;
   for i in 0..#TRIALS {
     newSum += testnew(a,b);
   }
   const elapsedNewavg = newSum/TRIALS;
 
+  // check correctness
+  assert(newval.equals(oldval));
   
   const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {
