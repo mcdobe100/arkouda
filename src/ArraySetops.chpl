@@ -108,16 +108,14 @@ module ArraySetops
       writeln("new start: ", Memory.memoryUsed());
       const memStart = Memory.memoryUsed();
       const aux = radixSortLSD_keys(concatset(a,b));
-      const D = aux.domain;
+      const ref D = aux.domain;
 
-      const sliceComp = aux[..D.high-1] != aux[D.low+1..];
-      
       // Concatenate a `true` onto each end of the array
-      var flag = makeDistArray((sliceComp.size + 2), bool);
-      const fD = flag.domain;
+      var flag = makeDistArray((aux.size + 1), bool);
+      const ref fD = flag.domain;
       
       flag[fD.low] = true;
-      flag[fD.low+1..#fD.high-1] = sliceComp;
+      flag[fD.low+1..fD.high-1] = aux[..D.high-1] != aux[D.low+1..];
       flag[fD.high] = true;
 
       var mask;
