@@ -1,6 +1,6 @@
 use TestBase;
 
-use ArraySetops;
+use Indexing;
 
 config const NINPUTS = 10_000;
 config const MAX_VAL = 50_000;
@@ -9,12 +9,12 @@ config const TRIALS = 10;
 proc testold(a, b, param warmUp=false) {
   //If warm up task then return value to check correctness
   if(warmUp) {
-    var res = setxor1d(a,b,false);
+    var res = concatset(a,b);
     return res;
   } else {
     var d: Diags;
     d.start();
-    setxor1d(a,b,false);
+    concatset(a,b);
     d.stop(printTime=false);
     return d.elapsed();
   }
@@ -23,12 +23,12 @@ proc testold(a, b, param warmUp=false) {
 proc testnew(a, b, param warmUp=false) {
   //If warm up task then return value to check correctness
   if(warmUp) {
-    var res = setxor1d(a,b,false);
+    var res = concatsetnew(a,b);
     return res;
   } else {
     var d: Diags;
     d.start();
-    setxor1d(a,b,false);
+    concatsetnew(a,b);
     d.stop(printTime=false);
     return d.elapsed();
   }
