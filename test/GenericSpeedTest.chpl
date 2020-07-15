@@ -2,7 +2,7 @@ use TestBase;
 
 use Indexing;
 
-config const NINPUTS = 10_000;
+config const NINPUTS = 1_000_000_000;
 config const MAX_VAL = 50_000;
 config const TRIALS = 10;
 
