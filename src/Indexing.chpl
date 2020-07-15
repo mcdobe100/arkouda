@@ -60,10 +60,16 @@ module Indexing {
     }
     proc concatsetnew(a: [?aD] ?t, b: [?bD] t) {
       var ret = makeDistArray((a.size + b.size), t);
-      
-      forall (i, eai, bai) in zip(a.domain, a, b) with (var agg = newDstAggregator(int)) {
-          agg.copy(ret[i], eai);
-          agg.copy(ret[i+aD.size], bai);
+
+      if(aD == bD) {
+        forall (i, eai, bai) in zip(a.domain, a, b) with (var agg = newDstAggregator(int)) {
+            agg.copy(ret[i], eai);
+            agg.copy(ret[i+aD.size], bai);
+        }
+      }
+      else {
+        ret[{0..#a.size}] = a;
+        ret[{a.size..#b.size}] = b;
       }
 
       return ret;
