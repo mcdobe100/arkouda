@@ -41,13 +41,33 @@ module ArraySetops
       var aux = radixSortLSD_keys(concatset(a,b));
 
       // All elements except the last
-      const ref head = aux[..D.high-1];
+      const ref head = aux[..aux.domain.high-1];
 
       // All elements except the first
-      const ref tail = aux[D.low+1..];
+      const ref tail = aux[aux.domain.low+1..];
+      
       const mask = head == tail;
 
-      const int1d = boolIndexer(head, mask);
+      return boolIndexer(head, mask);
+    }
+
+    proc intersect1dold(a: [] int, b: [] int, assume_unique: bool) {
+      //if not unique, unique sort arrays then perform operation
+      if (!assume_unique) {
+        var a1  = uniqueSort(a, false);
+        var b1  = uniqueSort(b, false);
+        return intersect1dHelperold(a1, b1);
+      }
+      return intersect1dHelperold(a,b);
+    }
+
+    proc intersect1dHelperold(a: [?D] ?t, b: [] t) {
+      var aux = radixSortLSD_keys(concatset(a,b));
+
+      var head = sliceHead(aux);
+      var mask = head == sliceTail(aux);
+      
+      var int1d = boolIndexer(head, mask);
 
       return int1d;
     }

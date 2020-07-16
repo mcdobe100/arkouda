@@ -50,30 +50,34 @@ class SetOpsTest(ArkoudaTest):
 
     def setUp(self):
         ArkoudaTest.setUp(self)
-        SIZE = 5
-        self.a = ak.randint(0, 2*SIZE, SIZE)
-        self.b = ak.randint(0, 2*SIZE, SIZE)     
+        SIZE = 20
+        self.a = ak.randint(0, SIZE, SIZE)
+        self.b = ak.randint(SIZE/2, 2*SIZE, SIZE)
   
     def testOneDimensionalSetUnion(self): 
         set_union = ak.union1d(self.a,self.b)
+        set_union_np = np.union1d(self.a,self.b)
         # elements in a or elements in b (or in both a and b)
-        self.assertTrue(ak.all(ak.in1d(set_union,self.a) \
-                               | ak.in1d(set_union,self.b)))
+        self.assertTrue(np.allclose(set_union, set_union_np))
 
     def testOneDimensionalSetIntersection(self):
         set_intersection = ak.intersect1d(self.a,self.b)
+        set_intersection_np = np.intersect1d(self.a,self.b)
+        print(self.a)
+        print(self.b)
+        print(set_intersection)
+        print(set_intersection_np)
         # elements in a and elements in b (elements in both a and b)
-        self.assertTrue(ak.all(ak.in1d(set_intersection,self.a) & \
-                               ak.in1d(set_intersection,self.b)))
+        self.assertTrue(np.allclose(set_intersection, set_intersection_np))
 
     def testOneDimensionalSetDifference(self):
         set_difference = ak.setdiff1d(self.a,self.b)
+        set_difference_np = np.setdiff1d(self.a,self.b)
         # elements in a and not in b
-        self.assertTrue((ak.in1d(set_difference,self.a).all() & \
-                         ak.in1d(set_difference,self.b,invert=True).all()))
+        self.assertTrue(np.allclose(set_difference, set_difference_np))
 
     def testOneDimensionalSetXor(self):
         set_xor = ak.setxor1d(self.a,self.b)
-        set_intersection = ak.intersect1d(self.a,self.b)
+        set_xor_np = np.setxor1d(self.a,self.b)
         # elements NOT in the intersection of a and b
-        self.assertTrue(ak.all(ak.in1d(set_xor, set_intersection, invert=True)))
+        self.assertTrue(np.allclose(set_xor,set_xor_np))

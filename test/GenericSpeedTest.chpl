@@ -9,7 +9,7 @@ config const TRIALS = 10;
 proc testold(a, b, param warmUp=false) {
   //If warm up task then return value to check correctness
   if(warmUp) {
-    var res = setxor1d(a,b,false);
+    var res = intersect1dold(a,b,false);
     return res;
   } else {
     var d: Diags;
@@ -23,7 +23,7 @@ proc testold(a, b, param warmUp=false) {
 proc testnew(a, b, param warmUp=false) {
   //If warm up task then return value to check correctness
   if(warmUp) {
-    var res = setxor1d(a,b,false);
+    var res = intersect1d(a,b,false);
     return res;
   } else {
     var d: Diags;
@@ -43,27 +43,13 @@ proc main() {
   // run warmup test
   const oldval = testold(a,b,true);
 
-  var oldSum = 0.0;
-  for i in 0..#TRIALS {
-    oldSum += testold(a,b);
-  }
-  const elapsedOldavg = oldSum/TRIALS;
-
   // run warmup test
   const newval = testnew(a,b,true);
-  
-  var newSum = 0.0;
-  for i in 0..#TRIALS {
-    newSum += testnew(a,b);
-  }
-  const elapsedNewavg = newSum/TRIALS;
 
   // check correctness
   assert(newval.equals(oldval));
   
   const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {
-    writeln("Current main implementation with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedOldavg, MB/elapsedOldavg));
-    writeln("Implementation with changes with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedNewavg, MB/elapsedNewavg));
   }
 }
