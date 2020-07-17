@@ -3,7 +3,7 @@ use TestBase;
 use ReductionMsg;
 
 
-config const ARRSIZE = 10_000_000;
+config const ARRSIZE = 10_000;
 config const GROUPS = 64;
 config const NINPUTS = 10_000;
 config const MAX_VAL = 50_000;
@@ -47,38 +47,40 @@ proc main() {
   var segments = makeDistArray(GROUPS, int);
   fillInt(segments, 1, GROUPS+1);
 
-  // run warmup test
-  const oldval = testold(orig,segments,true);
-
-  var oldSum = 0.0;
-  writeln("Old trials...");
   for i in 0..#TRIALS {
-    var time = testold(orig,segments);
-    writeln(time);
-    oldSum += time;
-  }
-  writeln("End of old test\n");
-  const elapsedOldavg = oldSum/TRIALS;
-  
-  // run warmup test
-  const newval = testnew(orig,segments,true);
+    // run warmup test
+    const oldval = testold(orig,segments,true);
 
-  var newSum = 0.0;
-  writeln("New trials... ");
-  for i in 0..#TRIALS {
-    var time = testnew(orig,segments);
-    writeln(time);
-    newSum += time;
-  }
-  writeln("End of new test\n");
-  const elapsedNewavg = newSum/TRIALS;
+    var oldSum = 0.0;
+    writeln("Old trials...");
+    for i in 0..#TRIALS {
+      var time = testold(orig,segments);
+      writeln(time);
+      oldSum += time;
+    }
+    writeln("End of old test\n");
+    const elapsedOldavg = oldSum/TRIALS;
 
-  // check correctness
-  assert(newval.equals(oldval));
+    // run warmup test
+    const newval = testnew(orig,segments,true);
 
-  const MB:real = byteToMB(NINPUTS*8.0);
-  if printTimes {
-    writeln("Current main implementation with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedOldavg, MB/elapsedOldavg));
-    writeln("Implementation with changes with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedNewavg, MB/elapsedNewavg));
+    var newSum = 0.0;
+    writeln("New trials... ");
+    for i in 0..#TRIALS {
+      var time = testnew(orig,segments);
+      writeln(time);
+      newSum += time;
+    }
+    writeln("End of new test\n");
+    const elapsedNewavg = newSum/TRIALS;
+
+    // check correctness
+    assert(newval.equals(oldval));
+
+    const MB:real = byteToMB(NINPUTS*8.0);
+    if printTimes {
+      writeln("Current main implementation with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedOldavg, MB/elapsedOldavg));
+      writeln("Implementation with changes with %i elements (%.1dr MB) took %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedNewavg, MB/elapsedNewavg));
+    }
   }
 }
