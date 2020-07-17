@@ -1,6 +1,6 @@
 use TestBase;
 
-use ArraySetops;
+use ReductionMsg;
 
 
 config const ARRSIZE = 10_000_000;
@@ -51,22 +51,26 @@ proc main() {
   const newval = testnew(orig,segments,true);
 
   var newSum = 0.0;
+  writeln("New trials... ");
   for i in 0..#TRIALS {
     var time = testnew(orig,segments);
     writeln(time);
     newSum += time;
   }
+  writeln("End of new test\n");
   const elapsedNewavg = newSum/TRIALS;
 
   // run warmup test
   const oldval = testold(orig,segments,true);
 
   var oldSum = 0.0;
+  writeln("Old trials... ");
   for i in 0..#TRIALS {
     var time = testold(orig,segments);
     writeln(time);
     oldSum += time;
   }
+  writeln("End of old test\n");
   const elapsedOldavg = oldSum/TRIALS;
 
 
