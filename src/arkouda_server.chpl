@@ -190,6 +190,7 @@ proc main() {
 
             select cmd
             {
+                when "mink"              {repMsg = minkMsg(cmd, payload, st);}
                 when "array"             {repMsg = arrayMsg(cmd, payload, st);}
                 when "tondarray"         {binaryRepMsg = tondarrayMsg(cmd, payload,st);}
                 when "intersect1d"       {repMsg = intersect1dMsg(cmd, payload, st);}

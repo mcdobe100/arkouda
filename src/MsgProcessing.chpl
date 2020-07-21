@@ -1,4 +1,3 @@
-
 module MsgProcessing
 {
     use ServerConfig;
@@ -30,6 +29,7 @@ module MsgProcessing
     public use JoinEqWithDTMsg;
     public use RegistrationMsg;
     public use ArraySetopsMsg;
+    public use MinKMsg;
     
     /* 
     Parse, execute, and respond to a create message 
