@@ -44,7 +44,7 @@ module MinKMsg
              var e = toSymEntry(gEnt,int);
              
              var aV = computeMyMink(e.a, k:int);
-             st.addEntry(vname, new shared SymEntry(aV));
+             st.addEntry(vname, new shared SymEntry(aV._data));
 
              var s = try! "created " + st.attrib(vname);
              return s;

@@ -11,6 +11,12 @@ module Heap {
       _data = max(eltType);
     }
 
+    proc pushArr(arr: [?D]) {
+      for i in D {
+        pushIfSmaller(_data[i]);
+      }
+    }
+
     proc pushIfSmaller(val: eltType) {
       if(val < _data[0]) {
         _data[_data.domain.low] = val;
