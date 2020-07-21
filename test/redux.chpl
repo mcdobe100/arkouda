@@ -34,22 +34,13 @@ proc testheap(a) {
   return d.elapsed();
 }
 
-proc testreg(a) {
-  var d: Diags;
-
-  d.start();
-  regcomputeMyMink(a,K);
-  d.stop(printTime=false);
-  return d.elapsed();  
-}
-
 proc main() {
   var a = makeDistArray(NINPUTS, int);
   fillInt(a, 0, MAX_VAL);
 
   var h = new heap(int, NINPUTS);
   
-  const elapsed = testreg(h);
+  const elapsed = testheap(h);
 
   const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {

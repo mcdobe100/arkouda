@@ -3,11 +3,13 @@ module Heap {
   record heap {
     type eltType;
     var size;
-    var _data: [0..#size] eltType;
+    var dom = domain(1);
+    var _data: [dom] eltType;
 
     proc init(type eltType, size: int) {
       this.eltType = eltType;
       this.size = size;
+      dom = {0..#size};
       _data = max(eltType);
     }
 
