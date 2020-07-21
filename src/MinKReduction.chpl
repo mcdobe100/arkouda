@@ -1,4 +1,5 @@
 module MinKReduction {
+  use Heap;
   /*
    * 'mink' reduction implementation. Returns vector of k elements of type
    * eltType.
@@ -9,24 +10,26 @@ module MinKReduction {
     const k: int = 3;
 
     // Store minimum k items as vector in descending order.
-    var v: [0..#k] eltType = max(eltType);
+    var v = new heap(eltType, k);
 
     proc identity {
-      var v: [0..#k] eltType = max(eltType); return v;
+      var v = new heap(eltType, k); return v;
     }
 
     proc accumulateOntoState(ref v, value: eltType) {
-      if value <= v[0] {
-        v[0] = value;
-        for i in 1..(k-1) do
-          if v[i-1] < v[i] then
-            v[i-1] <=> v[i];
-      }
+      v.pushIfSmaller(value);
     }
 
     proc accumulate(value: eltType) {
       accumulateOntoState(v, value);
     }
+
+    proc accumulate(accumState: heap(eltType,int)) {
+      for stateValue in accumState {
+        accumulate(stateValue);
+      }
+    }
+
 
     proc accumulate(accumState: []) {
       for stateValue in accumState {
