@@ -3,9 +3,9 @@ use Heap;
 use Math;
 use TestBase;
 
-config const NINPUTS = 100_000_000;
+config const NINPUTS = 100;
 config const MAX_VAL = 50_000;
-config const K = 100000;
+config const K = 10;
 config const REG = false;
 
 proc testheap(a) {

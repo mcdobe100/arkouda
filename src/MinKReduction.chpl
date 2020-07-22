@@ -1,5 +1,6 @@
 module MinKReduction {
   use Heap;
+  use RadixSortLSD;
   /*
    * 'mink' reduction implementation. Returns vector of k elements of type
    * eltType.
@@ -25,9 +26,7 @@ module MinKReduction {
     }
 
     proc accumulate(accumState: heap(eltType,int)) {
-      for stateValue in accumState {
-        accumulate(stateValue);
-      }
+      v._data = merge(v, accumState);
     }
 
 
@@ -140,5 +139,4 @@ module MinKReduction {
     delete minkInstance;
     return result;
   }
-
 }

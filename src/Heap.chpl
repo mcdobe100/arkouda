@@ -1,5 +1,6 @@
 module Heap {
   use SymArrayDmap;
+  use Sort;
   record heap {
     type eltType;
     var size;
@@ -15,7 +16,7 @@ module Heap {
 
     proc pushArr(arr: [?D]) {
       for i in D {
-        pushIfSmaller(_data[i]);
+        pushIfSmaller(arr[i]);
       }
     }
 
@@ -50,4 +51,24 @@ module Heap {
       }
     }
   }//end heap
-}//end moduleB
+
+  proc merge(heap1: heap(int, int), heap2: heap(int, int)): [heap1._data.domain] int {
+    var first = heap1._data;
+    var second = heap2._data;
+    sort(first);
+    sort(second);
+    var temp: [heap1._data.domain] heap1.eltType;
+    var a: int = first.domain.low;
+    var b: int = second.domain.low;
+    for i in temp.domain {
+      if(a < b) {
+        temp[i] = first[a];
+        a += 1;
+      } else {
+        temp[i] = second[b];
+        b += 1;
+      }
+    }
+    return temp;
+  }
+}//end module
