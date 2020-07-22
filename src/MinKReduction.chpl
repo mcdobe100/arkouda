@@ -26,9 +26,15 @@ module MinKReduction {
     }
 
     proc accumulate(accumState: heap(eltType,int)) {
-      v._data = merge(v, accumState);
+      writeln("accum heap");
+      if(accumState._data[0] == max(eltType)) {
+        writeln("blank");
+        return;
+      }
+      for stateValue in accumState {
+        accumulate(stateValue);
+      }
     }
-
 
     proc accumulate(accumState: []) {
       for stateValue in accumState {
@@ -37,7 +43,9 @@ module MinKReduction {
     }
 
     proc combine(state: borrowed mink(eltType)) {
-      accumulate(state.v);
+      writeln("from combine");
+      //accumulate(state.v);
+      v._data = merge(v, state.v);
     }
 
     proc generate() {

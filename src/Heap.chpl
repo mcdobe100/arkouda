@@ -61,7 +61,7 @@ module Heap {
     var a: int = first.domain.low;
     var b: int = second.domain.low;
     for i in temp.domain {
-      if(a < b) {
+      if(first[a] < second[b]) {
         temp[i] = first[a];
         a += 1;
       } else {
