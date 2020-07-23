@@ -7,19 +7,20 @@ module MinK {
   use Heap;
   use RadixSortLSD;
   
-  class mink : ReduceScanOp {
+  class minormaxk : ReduceScanOp {
     type eltType;
-    const k: int = 3;
+    const k: int;
+    const isMinK: bool;
 
     // create a new heap per task
-    var v = new heap(eltType, k);
+    var v = new heap(eltType, k, isMinK);
 
     proc identity {
-      var v = new heap(eltType, k); return v;
+      var v = new heap(eltType, k, isMinK); return v;
     }
 
     proc accumulateOntoState(ref v, value: eltType) {
-      v.pushIfSmaller(value);
+      v.push(value);
     }
 
     proc accumulate(value: eltType) {
@@ -40,7 +41,7 @@ module MinK {
 
     // when combining, merge instead of
     // accumulating each individual value
-    proc combine(state: borrowed mink(eltType)) {
+    proc combine(state: borrowed minormaxk(eltType)) {
       v._data = merge(v, state.v);
     }
 
@@ -49,7 +50,7 @@ module MinK {
     }
 
     proc clone() {
-      return new unmanaged mink(eltType=eltType, k=k);
+      return new unmanaged minormaxk(eltType=eltType, k=k, isMinK=isMinK);
     }
   }
 
@@ -59,7 +60,16 @@ module MinK {
    * passed into the class
    */
   proc computeMyMink(arr, kval:int) {
-    var minkInstance = new unmanaged mink(eltType=int, k=kval);
+    var minkInstance = new unmanaged minormaxk(eltType=int, k=kval, isMinK=true);
+    var result = minkInstance.identity;
+    [ elm in arr with (minkInstance reduce result) ]
+      result reduce= elm;
+    delete minkInstance;
+    return result;
+  }
+
+  proc computeMyMaxk(arr, kval:int) {
+    var minkInstance = new unmanaged minormaxk(eltType=int, k=kval, isMinK=false);
     var result = minkInstance.identity;
     [ elm in arr with (minkInstance reduce result) ]
       result reduce= elm;

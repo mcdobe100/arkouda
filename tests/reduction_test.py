@@ -39,13 +39,14 @@ def run_test(verbose=True):
     aka = make_array()
     
     failures = 0
-    try:
-        akres = ak.mink(aka, K)
-        npres = np.sort(aka.to_ndarray())[:K] # first K elements from sorted array
-    except RuntimeError as E:
-        if verbose: print("Arkouda error: ", E)
-    
-    failures += compare_results(akres, npres)
+    for i in range(10):
+        try:
+            akres = ak.mink(aka, K)
+            npres = np.sort(aka.to_ndarray())[:K] # first K elements from sorted array
+        except RuntimeError as E:
+            if verbose: print("Arkouda error: ", E)
+
+        failures += compare_results(akres, npres)
     
     return failures
 
