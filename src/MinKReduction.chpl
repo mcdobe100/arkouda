@@ -27,7 +27,6 @@ module MinKReduction {
 
     proc accumulate(accumState: heap(eltType,int)) {
       if(accumState._data[0] == max(eltType)) {
-        writeln("blank");
         return;
       }
       for stateValue in accumState {
