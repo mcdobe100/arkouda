@@ -1,3 +1,7 @@
+/*
+ * Max heap
+ */
+
 module Heap {
   use SymArrayDmap;
   use Sort;
@@ -20,6 +24,7 @@ module Heap {
       }
     }
 
+    // Drop value if too big
     proc pushIfSmaller(val: eltType) {
       if(val < _data[0]) {
         _data[_data.domain.low] = val;
@@ -52,23 +57,27 @@ module Heap {
     }
   }//end heap
 
+  // Sort both heaps and then merge them
+  // returns an array that contains the
+  // smallest values from each array sorted.
+  // Returned array is size of the original heaps.
   proc merge(heap1: heap(int, int), heap2: heap(int, int)): [heap1._data.domain] int {
     var first = heap1._data;
     var second = heap2._data;
     sort(first);
     sort(second);
-    var temp: [heap1._data.domain] heap1.eltType;
+    var ret: [heap1._data.domain] heap1.eltType;
     var a: int = first.domain.low;
     var b: int = second.domain.low;
-    for i in temp.domain {
+    for i in ret.domain {
       if(first[a] < second[b]) {
-        temp[i] = first[a];
+        ret[i] = first[a];
         a += 1;
       } else {
-        temp[i] = second[b];
+        ret[i] = second[b];
         b += 1;
       }
     }
-    return temp;
+    return ret;
   }
 }

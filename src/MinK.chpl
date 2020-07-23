@@ -1,16 +1,17 @@
+/*
+ * 'mink' reduction implementation. Returns 
+ * vector of k elements of type eltType.
+ */
+
 module MinK {
   use Heap;
   use RadixSortLSD;
-  /*
-   * 'mink' reduction implementation. Returns vector of k elements of type
-   * eltType.
-   */
-
+  
   class mink : ReduceScanOp {
     type eltType;
     const k: int = 3;
 
-    // Store minimum k items as vector in descending order.
+    // create a new heap per task
     var v = new heap(eltType, k);
 
     proc identity {
@@ -37,8 +38,9 @@ module MinK {
       }
     }
 
+    // when combining, merge instead of
+    // accumulating each individual value
     proc combine(state: borrowed mink(eltType)) {
-      //accumulate(state.v);
       v._data = merge(v, state.v);
     }
 
@@ -51,6 +53,11 @@ module MinK {
     }
   }
 
+  /*
+   * Instinatiate the mink reduction class
+   * so that a custom `k` value can be
+   * passed into the class
+   */
   proc computeMyMink(arr, kval:int) {
     var minkInstance = new unmanaged mink(eltType=int, k=kval);
     var result = minkInstance.identity;

@@ -1,6 +1,5 @@
-/* Array set operations
- includes intersection, union, xor, and diff
- currently, only performs operations with integer arrays 
+/* min-k reduction 
+ * Stores the sorted minimum k values onto the server
  */
 
 module MinKMsg
