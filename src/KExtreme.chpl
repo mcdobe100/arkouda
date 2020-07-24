@@ -1,11 +1,13 @@
 /*
- * Max heap
+ * kextreme data structure that is used
+ * to track the minimum or maximum `size`
+ * values that are in an array.
  */
 
-module Heap {
+module KExtreme {
   use SymArrayDmap;
   use Sort;
-  record heap {
+  record kextreme {
     type eltType;
     var size;
     var dom = {0..#size};
@@ -18,20 +20,24 @@ module Heap {
       }
     }
 
-    // Drop value if too big
-    proc pushIfSmaller(val: eltType) {
+    // Push a value into the kextreme
+    // instance, only pushes a value if
+    // it is an encountered extreme
+    proc push(val: eltType) {
       if(val < _data[0]) {
-        _data[_data.domain.low] = val;
+        _data[0] = val;
         heapifyDown();
       }
     }
 
+    // Restore heap property from the
+    // top element down
     proc heapifyDown() {
-      var i = _data.domain.low;
+      var i = 0;
       while(i < size) {
         var gi = i*2;
-        if(gi > _data.domain.high) then break;
-        if(gi + 1 <= _data.domain.high) {
+        if(gi > size-1) then break;
+        if(gi + 1 <= size-1) {
           if(_data[gi+1] > _data[gi]) {
             gi += 1;
           }
@@ -55,12 +61,12 @@ module Heap {
   // returns an array that contains the
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
-  proc merge(ref heap1: heap(int, int), ref heap2: heap(int, int)): [heap1._data.domain] int {
-    ref first = heap1._data;
-    ref second = heap2._data;
-    if !heap1.isSorted then sort(first);
-    if !heap2.isSorted then sort(second);
-    var ret: [first.domain] heap1.eltType;
+  proc merge(ref v1: kextreme(int, int), ref v2: kextreme(int, int)): [v1._data.domain] int {
+    ref first = v1._data;
+    ref second = v2._data;
+    if !v1.isSorted then sort(first);
+    if !v2.isSorted then sort(second);
+    var ret: [first.domain] v1.eltType;
     var a,b: int = 0;
     for i in ret.domain {
       if(first[a] < second[b]) {
