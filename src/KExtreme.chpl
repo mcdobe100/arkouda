@@ -72,8 +72,14 @@ module KExtreme {
   proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
     ref first = v1._data;
     ref second = v2._data;
-    if !v1.isSorted then sort(first);
-    if !v2.isSorted then sort(second);
+    if !v1.isSorted {
+      sort(first);
+      v1.isSorted = true;
+    }
+    if !v2.isSorted {
+      sort(second);
+      v2.isSorted = true;
+    }
     var ret: [first.domain] v1.eltType;
     var a,b: int = 0;
     for i in ret.domain {
