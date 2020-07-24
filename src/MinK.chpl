@@ -25,7 +25,7 @@ module MinK {
       accumulateOntoState(v, value);
     }
 
-    proc accumulate(accumState: kextreme(eltType,int)) {
+    proc accumulate(accumState: kextreme(eltType)) {
       for stateValue in accumState {
         accumulate(stateValue);
       }

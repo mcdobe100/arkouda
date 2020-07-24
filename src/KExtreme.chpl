@@ -9,7 +9,7 @@ module KExtreme {
   use Sort;
   record kextreme {
     type eltType;
-    var size;
+    var size: int;
     var dom = {0..#size};
     var _data: [dom] eltType = max(eltType);
     var isSorted: bool = false;
@@ -61,7 +61,7 @@ module KExtreme {
   // returns an array that contains the
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
-  proc merge(ref v1: kextreme(int, int), ref v2: kextreme(int, int)): [v1._data.domain] int {
+  proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
     ref first = v1._data;
     ref second = v2._data;
     if !v1.isSorted then sort(first);
