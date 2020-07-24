@@ -18,7 +18,7 @@ module KExtreme {
     var numEmpty: int = size-1;
     var _data: [dom] eltType = max(eltType);
     var isSorted: bool = false;
-
+    
     proc pushArr(arr: [?D]) {
       for i in D {
         push(arr[i]);
@@ -29,10 +29,14 @@ module KExtreme {
     // instance, only pushes a value if
     // it is an encountered extreme
     proc push(val: eltType) {
-      if(numEmpty > 1 && _data[0] == max(eltType)) {
+      /* if(numEmpty > 1 && _data[0] == max(eltType)) {
         _data[numEmpty] = val;
         numEmpty-=1;
       } else if val < _data[0] {
+        _data[0] = val;
+        heapifyDown();
+        }*/
+      if val < _data[0] {
         _data[0] = val;
         heapifyDown();
       }
@@ -58,28 +62,33 @@ module KExtreme {
       }
     }
 
+    // Sort the kextreme values if needed,
+    // moving from a heap to a sorted array
+    proc doSort() {
+      if !isSorted {
+        sort(_data);
+        isSorted = true;
+      }
+    }
+
     iter these() {
       for e in _data {
         yield e;
       }
     }
-  }//end heap
+  }
 
   // Sort both heaps and then merge them
   // returns an array that contains the
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
   proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
-    ref first = v1._data;
-    ref second = v2._data;
-    if !v1.isSorted {
-      sort(first);
-      v1.isSorted = true;
-    }
-    if !v2.isSorted {
-      sort(second);
-      v2.isSorted = true;
-    }
+    if !v1.isSorted then v1.doSort();
+    if !v2.isSorted then v2.doSort();
+
+    var first = v1._data;
+    var second = v2._data;
+
     var ret: [first.domain] v1.eltType;
     var a,b: int = 0;
     for i in ret.domain {
