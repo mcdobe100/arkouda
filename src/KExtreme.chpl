@@ -1,7 +1,11 @@
 /*
  * kextreme data structure that is used
  * to track the minimum or maximum `size`
- * values that are in an array.
+ * values that are in an array. Acts similar
+ * to a heap data structure, but can be
+ * sorted and merged to extract the
+ * extreme values from multiple kextreme
+ * objects.
  */
 
 module KExtreme {
@@ -11,12 +15,13 @@ module KExtreme {
     type eltType;
     var size: int;
     var dom = {0..#size};
+    var numEmpty: int = size-1;
     var _data: [dom] eltType = max(eltType);
     var isSorted: bool = false;
 
     proc pushArr(arr: [?D]) {
       for i in D {
-        pushIfSmaller(arr[i]);
+        push(arr[i]);
       }
     }
 
@@ -24,7 +29,10 @@ module KExtreme {
     // instance, only pushes a value if
     // it is an encountered extreme
     proc push(val: eltType) {
-      if(val < _data[0]) {
+      if(numEmpty > 1 && _data[0] == max(eltType)) {
+        _data[numEmpty] = val;
+        numEmpty-=1;
+      } else if val < _data[0] {
         _data[0] = val;
         heapifyDown();
       }
@@ -64,8 +72,14 @@ module KExtreme {
   proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
     ref first = v1._data;
     ref second = v2._data;
-    if !v1.isSorted then sort(first);
-    if !v2.isSorted then sort(second);
+    if !v1.isSorted {
+      sort(first);
+      v1.isSorted = true;
+    }
+    if !v2.isSorted {
+      sort(second);
+      v2.isSorted = true;
+    }
     var ret: [first.domain] v1.eltType;
     var a,b: int = 0;
     for i in ret.domain {
