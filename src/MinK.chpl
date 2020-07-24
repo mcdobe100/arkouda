@@ -40,7 +40,8 @@ module MinK {
     // when combining, merge instead of
     // accumulating each individual value
     proc combine(state: borrowed mink(eltType)) {
-      v._data = merge(v, state.v);
+      accumulate(state.v);
+      //v._data = merge(v, state.v);
     }
 
     proc generate() {

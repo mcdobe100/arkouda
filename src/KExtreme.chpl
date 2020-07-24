@@ -58,6 +58,11 @@ module KExtreme {
       }
     }
 
+    proc doSort() {
+      sort(_data);
+      isSorted = true;
+    }
+    
     iter these() {
       for e in _data {
         yield e;
@@ -65,21 +70,37 @@ module KExtreme {
     }
   }//end heap
 
+  proc mergeOld(v1: kextreme(int), v2: kextreme(int)): [v1._data.domain] int {
+    var first = v1._data;
+    var second = v2._data;
+    sort(first);
+    sort(second);
+    var temp: [v1._data.domain] v1.eltType;
+    var a: int = first.domain.low;
+    var b: int = second.domain.low;
+    for i in temp.domain {
+      if(first[a] < second[b]) {
+        temp[i] = first[a];
+        a += 1;
+      } else {
+        temp[i] = second[b];
+        b += 1;
+      }
+    }
+    return temp;
+  }
+  
   // Sort both heaps and then merge them
   // returns an array that contains the
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
   proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
-    ref first = v1._data;
-    ref second = v2._data;
-    if !v1.isSorted {
-      sort(first);
-      v1.isSorted = true;
-    }
-    if !v2.isSorted {
-      sort(second);
-      v2.isSorted = true;
-    }
+    if !v1.isSorted then v1.doSort();
+    if !v2.isSorted then v2.doSort();
+
+    var first = v1._data;
+    var second = v2._data;
+    
     var ret: [first.domain] v1.eltType;
     var a,b: int = 0;
     for i in ret.domain {
