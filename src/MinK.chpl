@@ -5,17 +5,16 @@
 
 module MinK {
   use Heap;
-  use RadixSortLSD;
   
   class mink : ReduceScanOp {
     type eltType;
-    const k: int = 3;
+    const k: int;
 
     // create a new heap per task
-    var v = new heap(eltType, k);
+    var v = new heap(eltType=eltType, size=k);
 
     proc identity {
-      var v = new heap(eltType, k); return v;
+      var v = new heap(eltType=eltType, size=k); return v;
     }
 
     proc accumulateOntoState(ref v, value: eltType) {

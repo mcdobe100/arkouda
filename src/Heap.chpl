@@ -12,14 +12,6 @@ module Heap {
     var _data: [dom] eltType = max(eltType);
     var isSorted: bool = false;
 
-    proc init(type eltType, size: int) {
-      this.eltType = eltType;
-      this.size = size;
-      dom = {0..#size};
-      _data = max(eltType);
-      this.isSorted = false;
-    }
-
     proc pushArr(arr: [?D]) {
       for i in D {
         pushIfSmaller(arr[i]);
@@ -64,13 +56,12 @@ module Heap {
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
   proc merge(ref heap1: heap(int, int), ref heap2: heap(int, int)): [heap1._data.domain] int {
-    if !heap1.isSorted then sort(heap1._data);
-    if !heap2.isSorted then sort(heap2._data);
-    const ref first = heap1._data;
-    const ref second = heap2._data;
-    var ret: [heap1._data.domain] heap1.eltType;
-    var a: int = 0;
-    var b: int = 0;
+    ref first = heap1._data;
+    ref second = heap2._data;
+    if !heap1.isSorted then sort(first);
+    if !heap2.isSorted then sort(second);
+    var ret: [first.domain] heap1.eltType;
+    var a,b: int = 0;
     for i in ret.domain {
       if(first[a] < second[b]) {
         ret[i] = first[a];
