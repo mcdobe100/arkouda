@@ -1,22 +1,18 @@
 /*
- * Max heap
+ * kextreme data structure that is used
+ * to track the minimum or maximum `size`
+ * values that are in an array.
  */
 
-module Heap {
+module KExtreme {
   use SymArrayDmap;
   use Sort;
-  record heap {
+  record kextreme {
     type eltType;
-    var size;
-    var dom = domain(1);
-    var _data: [dom] eltType;
-
-    proc init(type eltType, size: int) {
-      this.eltType = eltType;
-      this.size = size;
-      dom = {0..#size};
-      _data = max(eltType);
-    }
+    var size: int;
+    var dom = {0..#size};
+    var _data: [dom] eltType = max(eltType);
+    var isSorted: bool = false;
 
     proc pushArr(arr: [?D]) {
       for i in D {
@@ -24,20 +20,24 @@ module Heap {
       }
     }
 
-    // Drop value if too big
-    proc pushIfSmaller(val: eltType) {
+    // Push a value into the kextreme
+    // instance, only pushes a value if
+    // it is an encountered extreme
+    proc push(val: eltType) {
       if(val < _data[0]) {
-        _data[_data.domain.low] = val;
+        _data[0] = val;
         heapifyDown();
       }
     }
 
+    // Restore heap property from the
+    // top element down
     proc heapifyDown() {
-      var i = _data.domain.low;
+      var i = 0;
       while(i < size) {
         var gi = i*2;
-        if(gi > _data.domain.high) then break;
-        if(gi + 1 <= _data.domain.high) {
+        if(gi > size-1) then break;
+        if(gi + 1 <= size-1) {
           if(_data[gi+1] > _data[gi]) {
             gi += 1;
           }
@@ -61,14 +61,13 @@ module Heap {
   // returns an array that contains the
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
-  proc merge(heap1: heap(int, int), heap2: heap(int, int)): [heap1._data.domain] int {
-    var first = heap1._data;
-    var second = heap2._data;
-    sort(first);
-    sort(second);
-    var ret: [heap1._data.domain] heap1.eltType;
-    var a: int = first.domain.low;
-    var b: int = second.domain.low;
+  proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
+    ref first = v1._data;
+    ref second = v2._data;
+    if !v1.isSorted then sort(first);
+    if !v2.isSorted then sort(second);
+    var ret: [first.domain] v1.eltType;
+    var a,b: int = 0;
     for i in ret.domain {
       if(first[a] < second[b]) {
         ret[i] = first[a];
