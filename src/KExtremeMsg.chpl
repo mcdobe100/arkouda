@@ -2,7 +2,7 @@
  * Stores the sorted minimum k values onto the server
  */
 
-module MinKMsg
+module KExtremeMsg
 {
     use ServerConfig;
 

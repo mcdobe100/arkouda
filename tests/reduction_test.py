@@ -49,8 +49,8 @@ def run_test(verbose=True):
     
     return failures
 
-class SetOpsTest(ArkoudaTest):
-    def test_setops(self):
+class MinKTest(ArkoudaTest):
+    def test_mink(self):
         '''
         Executes run_test and asserts whether there are any errors
         
