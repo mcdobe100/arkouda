@@ -29,14 +29,15 @@ module KExtreme {
     // instance, only pushes a value if
     // it is an encountered extreme
     proc push(val: eltType) {
-      /* if(numEmpty > 1 && _data[0] == max(eltType)) {
+      if(numEmpty > 0 && _data[0] == max(eltType)) {
         _data[numEmpty] = val;
         numEmpty-=1;
-      } else if val < _data[0] {
+      } else if numEmpty == 0 && val < _data[0] {
         _data[0] = val;
-        heapifyDown();
-        }*/
-      if val < _data[0] {
+        heapify(0);
+        numEmpty = -1;
+      }
+      else if val < _data[0] {
         _data[0] = val;
         heapifyDown();
       }
@@ -60,6 +61,30 @@ module KExtreme {
         }
         else break;
       }
+    }
+
+    proc heapify(i: int) 
+    {
+      writeln("initial heapfiy");
+      var largest = i; // Initialize largest as root 
+      var l = 2 * i + 1; // left = 2*i + 1 
+      var r = 2 * i + 2; // right = 2*i + 2 
+
+      // If left child is larger than root 
+      if (l < size && _data[l] > _data[largest]) then
+          largest = l; 
+
+      // If right child is larger than largest so far 
+      if (r < size && _data[r] > _data[largest]) then
+          largest = r; 
+
+      // If largest is not root 
+      if (largest != i) { 
+          _data[i] <=> _data[largest]; 
+
+          // Recursively heapify the affected sub-tree 
+          heapify(largest); 
+      } 
     }
 
     // Sort the kextreme values if needed,
