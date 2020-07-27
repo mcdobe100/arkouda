@@ -29,15 +29,10 @@ module KExtreme {
     // instance, only pushes a value if
     // it is an encountered extreme
     proc push(val: eltType) {
-      if(numEmpty > 0 && _data[0] == max(eltType)) {
+      if(numEmpty > 1 && _data[0] == max(eltType)) {
         _data[numEmpty] = val;
         numEmpty-=1;
-      } else if numEmpty == 0 && val < _data[0] {
-        _data[0] = val;
-        heapify(0);
-        numEmpty = -1;
-      }
-      else if val < _data[0] {
+      } else if val < _data[0] {
         _data[0] = val;
         heapifyDown();
       }
@@ -48,43 +43,19 @@ module KExtreme {
     proc heapifyDown() {
       var i = 0;
       while(i < size) {
-        var gi = i*2;
-        if(gi > size-1) then break;
-        if(gi + 1 <= size-1) {
-          if(_data[gi+1] > _data[gi]) {
-            gi += 1;
-          }
-        }
-        if(_data[gi] > _data[i]) {
-          _data[gi] <=> _data[i];
-          i = gi;
-        }
-        else break;
+        var initial = i;
+        var l = 2*i+1; // left child
+        var r = 2*i+2; // right child
+        if (l < size && _data[l] > _data[i]) then
+          i = l;
+        // if right child is larger than largest so far 
+        if (r < size && _data[r] > _data[i]) then
+          i = r;
+        // if the largest value isn't the initial 
+        if (initial != i) {
+          _data[i] <=> _data[initial];
+        } else break;
       }
-    }
-
-    proc heapify(i: int) 
-    {
-      writeln("initial heapfiy");
-      var largest = i; // Initialize largest as root 
-      var l = 2 * i + 1; // left = 2*i + 1 
-      var r = 2 * i + 2; // right = 2*i + 2 
-
-      // If left child is larger than root 
-      if (l < size && _data[l] > _data[largest]) then
-          largest = l; 
-
-      // If right child is larger than largest so far 
-      if (r < size && _data[r] > _data[largest]) then
-          largest = r; 
-
-      // If largest is not root 
-      if (largest != i) { 
-          _data[i] <=> _data[largest]; 
-
-          // Recursively heapify the affected sub-tree 
-          heapify(largest); 
-      } 
     }
 
     // Sort the kextreme values if needed,
