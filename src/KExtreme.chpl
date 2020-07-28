@@ -96,4 +96,24 @@ module KExtreme {
     }
     return ret;
   }
+  proc mergeRef(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
+    if !v1.isSorted then v1.doSort();
+    if !v2.isSorted then v2.doSort();
+
+    ref first = v1._data;
+    ref second = v2._data;
+
+    var ret: [first.domain] v1.eltType;
+    var a,b: int = 0;
+    for i in ret.domain {
+      if(first[a] < second[b]) {
+        ret[i] = first[a];
+        a += 1;
+      } else {
+        ret[i] = second[b];
+        b += 1;
+      }
+    }
+    return ret;
+  }
 }

@@ -9,6 +9,7 @@ module MinK {
   class mink : ReduceScanOp {
     type eltType;
     const k: int;
+    const doRef=false;
 
     // create a new heap per task
     var v = new kextreme(eltType=eltType, size=k);
@@ -40,7 +41,11 @@ module MinK {
     // when combining, merge instead of
     // accumulating each individual value
     proc combine(state: borrowed mink(eltType)) {
-      v._data = merge(v, state.v);
+      if doRef {
+        v._data = mergeRef(v, state.v);
+      } else {
+        v._data = merge(v, state.v);
+      }
     }
 
     proc generate() {
@@ -57,8 +62,8 @@ module MinK {
    * so that a custom `k` value can be
    * passed into the class
    */
-  proc computeMyMink(arr, kval:int) {
-    var minkInstance = new unmanaged mink(eltType=int, k=kval);
+  proc computeMyMink(arr, kval:int, doRef=false) {
+    var minkInstance = new unmanaged mink(eltType=int, k=kval, doRef=doRef);
     var result = minkInstance.identity;
     [ elm in arr with (minkInstance reduce result) ]
       result reduce= elm;
