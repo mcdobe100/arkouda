@@ -52,4 +52,31 @@ module KExtremeMsg
            }
         }
     }
+
+    proc maxkMsg(cmd: string, payload: bytes, st: borrowed SymTab): string throws {
+        param pn = Reflection.getRoutineName();
+        var repMsg: string; // response message
+        // split request into fields
+        var (name, k) = payload.decode().splitMsgToTuple(2);
+
+        var vname = st.nextName();
+
+        var gEnt: borrowed GenSymEntry = st.lookup(name);
+
+        select(gEnt.dtype) {
+          when (DType.Int64) {
+             var e = toSymEntry(gEnt,int);
+
+             var aV = computeMyMink(e.a, k:int, false);
+             st.addEntry(vname, new shared SymEntry(aV._data));
+
+             var s = try! "created " + st.attrib(vname);
+             return s;
+           }
+           otherwise {
+             return notImplementedError("mink",gEnt.dtype);
+           }
+        }
+    }
+
 }

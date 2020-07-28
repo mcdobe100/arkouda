@@ -9,12 +9,13 @@ module MinK {
   class mink : ReduceScanOp {
     type eltType;
     const k: int;
+    const isMin=true;
 
     // create a new heap per task
-    var v = new kextreme(eltType=eltType, size=k);
+    var v = new kextreme(eltType=eltType, size=k, isMinReduction=isMin);
 
     proc identity {
-      var v = new kextreme(eltType=eltType, size=k); return v;
+      var v = new kextreme(eltType=eltType, size=k, isMinReduction=isMin); return v;
     }
 
     proc accumulateOntoState(ref v, value: eltType) {
@@ -48,7 +49,7 @@ module MinK {
     }
 
     proc clone() {
-      return new unmanaged mink(eltType=eltType, k=k);
+      return new unmanaged mink(eltType=eltType, k=k, isMin=isMin);
     }
   }
 
@@ -57,8 +58,8 @@ module MinK {
    * so that a custom `k` value can be
    * passed into the class
    */
-  proc computeMyMink(arr, kval:int) {
-    var minkInstance = new unmanaged mink(eltType=int, k=kval);
+  proc computeMyMink(arr, kval:int, isMin=true) {
+    var minkInstance = new unmanaged mink(eltType=int, k=kval, isMin=isMin);
     var result = minkInstance.identity;
     [ elm in arr with (minkInstance reduce result) ]
       result reduce= elm;
