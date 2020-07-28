@@ -61,10 +61,8 @@ module KExtreme {
     // Sort the kextreme values if needed,
     // moving from a heap to a sorted array
     proc doSort() {
-      if !isSorted {
-        sort(_data);
-        isSorted = true;
-      }
+      sort(_data);
+      isSorted = true;
     }
 
     iter these() {
