@@ -10,7 +10,7 @@ def mink(pda, k):
     """
     Find the `k` minimum values of an array.
 
-    Returns the smallest `k` values of an array, sorted
+    Returns the smallest k values of an array, sorted
 
     Parameters
     ----------
@@ -46,21 +46,21 @@ def mink(pda, k):
 
 def maxk(pda, k):
     """
-    Find the `k` maximum values of an array.
+    Find the `k` minimum values of an array.
 
-    Returns the largest `k` values of an array, sorted
+    Returns the smallest k values of an array, sorted
 
     Parameters
     ----------
     pda : pdarray
         Input array.
     k : integer
-        The desired count of maximum values to be returned by the output.
+        The desired count of minimum values to be returned by the output.
 
     Returns
     -------
     pdarray, int
-        The maximum `k` values from pda
+        The minimum `k` values from pda
 
     Notes
     -----
@@ -69,8 +69,8 @@ def maxk(pda, k):
     Examples
     --------
     >>> A = ak.array([10,5,1,3,7,2,9,0])
-    >>> ak.maxk(A, 3)
-    array([7, 9, 10])
+    >>> ak.mink(A, 3)
+    array([0, 1, 2])
     """
     if isinstance(pda, pdarray):
         if k == 0:
