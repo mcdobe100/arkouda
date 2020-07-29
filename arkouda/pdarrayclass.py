@@ -6,7 +6,7 @@ from arkouda.dtypes import *
 from arkouda.dtypes import structDtypeCodes, NUMBER_FORMAT_STRINGS
 
 __all__ = ["pdarray", "info", "any", "all", "is_sorted", "sum", "prod", "min", "max",
-           "argmin", "argmax", "mean", "var", "std"]
+           "argmin", "argmax", "mean", "var", "std", "mink"]
 
 def parse_single_value(msg):
     """
@@ -448,6 +448,10 @@ class pdarray:
         """
         return std(self, ddof=ddof)
 
+    def mink(self, k):
+        return mink(self,k)
+
+
     def to_ndarray(self):
         """
         Convert the array to a np.ndarray, transferring array data from the
@@ -607,6 +611,7 @@ class pdarray:
         else:
             raise ValueError("Allowed modes are 'truncate' and 'append'")
         rep_msg = generic_msg("tohdf {} {} {} {}".format(self.name, dataset, m, json.dumps([prefix_path])))
+
 
 
 # creates pdarray object
@@ -809,3 +814,14 @@ def std(pda, ddof=0):
     unbiased estimate of the standard deviation per se.
     """
     return np.sqrt(var(pda, ddof=ddof))
+
+def mink(pda, k):
+    if isinstance(pda, pdarray):
+        if k == 0:
+            return []
+        if pda.dtype != int or pda.size == 0:
+            raise TypeError("must be a non-empty pdarray {} of type int".format(pda))
+        repMsg = generic_msg("mink {} {}".format(pda.name, k))
+        return create_pdarray(repMsg)
+    else:
+        raise TypeError("must be pdarray {}".format(pda))
