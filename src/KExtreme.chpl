@@ -48,14 +48,14 @@ module KExtreme {
     proc heapifyDown() {
       var i = 0;
       while(i < size) {
-        var initial = i;
-        var l = 2*i+1; // left child
-        var r = 2*i+2; // right child
-        var cmpLeft = l<size && if isMinReduction then
+        const initial = i;
+        const l = 2*i+1; // left child
+        const r = 2*i+2; // right child
+        const cmpLeft = l<size && if isMinReduction then
           _data[l] > _data[i] else _data[l] < _data[i];
         if (cmpLeft) then i = l;
         // if right child is more extreme than largest so far
-        var cmpRight = r<size && if isMinReduction then
+        const cmpRight = r<size && if isMinReduction then
           _data[r] > _data[i] else _data[r] < _data[i];
         if (cmpRight) then i = r;
         // if the extreme value isn't the initial 
@@ -84,18 +84,19 @@ module KExtreme {
   // smallest values from each array sorted.
   // Returned array is size of the original heaps.
   proc merge(ref v1: kextreme(int), ref v2: kextreme(int)): [v1._data.domain] int {
+    const isMin = v1.isMinReduction;
     if !v1.isSorted then v1.doSort();
     if !v2.isSorted then v2.doSort();
 
-    var first = v1._data;
-    var second = v2._data;
+    const first = v1._data;
+    const second = v2._data;
     var ret: [first.domain] v1.eltType;
     var a,b,i: int = if v1.isMinReduction then
       0 else first.domain.high;
     const increment = if v1.isMinReduction then 1 else -1;
     
-    while(if v1.isMinReduction then i <= ret.domain.high else i >= 0) {
-      if(if v1.isMinReduction then first[a] < second[b] else first[a] > second[b]) {
+    while(if isMin then i <= ret.domain.high else i >= 0) {
+      if(if isMin then first[a] < second[b] else first[a] > second[b]) {
         ret[i] = first[a];
         a += increment;
       } else {
