@@ -31,6 +31,18 @@ module KExtreme {
     // instance, only pushes a value if
     // it is an encountered extreme
     proc push(val: eltType) {
+      const shouldAdd = if isMinReduction then val<_data[0] else val>_data[0];
+      const shouldAddEmpty = (numEmpty>1) && if isMinReduction then
+        _data[0]==max(eltType) else _data[0]==min(eltType);
+
+      if shouldAddEmpty {
+        _data[numEmpty] = val;
+        numEmpty-=1;
+      } else if shouldAdd {
+        _data[0] = val;
+        heapifyDown();
+      }
+      /*
       if isMinReduction {
         if(numEmpty > 1 && _data[0] == max(eltType)) {
           _data[numEmpty] = val;
@@ -47,7 +59,7 @@ module KExtreme {
           _data[0] = val;
           heapifyDown();
         }
-      }
+        }*/
     }
 
     // Restore heap property from the
