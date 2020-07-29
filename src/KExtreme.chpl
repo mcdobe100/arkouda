@@ -15,7 +15,7 @@ module KExtreme {
     type eltType;
     var size: int;
     var dom = {0..#size};
-    var numEmpty: int = size-1;
+    var numEmpty: int = size-2;
     var isSorted: bool = false;
     var isMinReduction=true;
     var _data: [dom] eltType = if isMinReduction then max(eltType) else min(eltType);
@@ -31,11 +31,11 @@ module KExtreme {
     // it is an encountered extreme
     proc push(val: eltType) {
       const shouldAdd = if isMinReduction then val<_data[0] else val>_data[0];
-      const shouldAddEmpty = (numEmpty>1) && if isMinReduction then
+      const shouldAddEmpty = (numEmpty>0) && if isMinReduction then
         _data[0]==max(eltType) else _data[0]==min(eltType);
 
       if shouldAddEmpty {
-        _data[numEmpty] = val;
+        _data[numEmpty+1] = val;
         numEmpty-=1;
       } else if shouldAdd {
         _data[0] = val;
