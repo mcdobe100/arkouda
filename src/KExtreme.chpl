@@ -42,24 +42,6 @@ module KExtreme {
         _data[0] = val;
         heapifyDown();
       }
-      /*
-      if isMinReduction {
-        if(numEmpty > 1 && _data[0] == max(eltType)) {
-          _data[numEmpty] = val;
-          numEmpty-=1;
-        } else if val < _data[0] {
-          _data[0] = val;
-          heapifyDown();
-        }
-      } else {
-        if(numEmpty > 1 && _data[0] == min(eltType)) {
-          _data[numEmpty] = val;
-          numEmpty-=1;
-        } else if val > _data[0] {
-          _data[0] = val;
-          heapifyDown();
-        }
-        }*/
     }
 
     // Restore heap property from the
