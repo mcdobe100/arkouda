@@ -22,11 +22,11 @@ module KReduce {
       var v = new kextreme(eltType=eltType, size=k, isMinReduction=isMin); return v;
     }
 
-    proc accumulateOntoState(ref v, value: eltType) {
+    proc accumulateOntoState(ref v, value: (eltType, int)) {
       v.push(value);
     }
 
-    proc accumulate(value: eltType) {
+    proc accumulate(value: (eltType, int)) {
       accumulateOntoState(v, value);
     }
 
