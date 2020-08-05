@@ -42,7 +42,7 @@ module KExtremeMsg
              var e = toSymEntry(gEnt,int);
 
              var aV = computeExtrema(e.a, k:int);
-             st.addEntry(vname, new shared SymEntry(aV._data));
+             st.addEntry(vname, new shared SymEntry(aV));
 
              var s = try! "created " + st.attrib(vname);
              return s;
@@ -68,7 +68,7 @@ module KExtremeMsg
              var e = toSymEntry(gEnt,int);
 
              var aV = computeExtrema(e.a, k:int, false);
-             st.addEntry(vname, new shared SymEntry(aV._data));
+             st.addEntry(vname, new shared SymEntry(aV));
 
              var s = try! "created " + st.attrib(vname);
              return s;

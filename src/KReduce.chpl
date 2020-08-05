@@ -65,9 +65,17 @@ module KReduce {
   proc computeExtrema(arr, kval:int, isMin=true) {
     var kred = new unmanaged kreduce(eltType=int, k=kval, isMin=isMin);
     var result = kred.identity;
-    [ elm in arr with (kred reduce result) ]
-      result reduce= elm;
+
+    var tmpArr: [arr.domain] (int, int);
+    for i in arr.domain {
+      tmpArr[i] = (arr[i], i);
+    }
+    [ elm in tmpArr with (kred reduce result) ]
+    result reduce= elm;
     delete kred;
-    return result;
+
+    var res = [elem in result] elem(1);
+    
+    return res;
   }
 }
