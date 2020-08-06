@@ -62,19 +62,22 @@ module KReduce {
    * so that a custom `k` value can be
    * passed into the class
    */
-  proc computeExtrema(arr, kval:int, isMin=true) {
+  proc computeExtrema(arr, kval:int, isMin=true, param isInd=true) {
     var kred = new unmanaged kreduce(eltType=int, k=kval, isMin=isMin);
     var result = kred.identity;
 
     var tmpArr: [arr.domain] (int, int);
-    for i in arr.domain {
-      tmpArr[i] = (arr[i], i);
+    forall (elem, val, i) in zip(tmpArr, arr, arr.domain) {
+      elem = (val, i);
     }
     [ elm in tmpArr with (kred reduce result) ]
     result reduce= elm;
     delete kred;
 
-    var res = [elem in result] elem(1);
+    var res;
+
+    if isInd then res = [elem in result] elem(1);
+    else res = [elem in result] elem(0);
     
     return res;
   }
