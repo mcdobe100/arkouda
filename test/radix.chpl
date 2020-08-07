@@ -2,11 +2,11 @@ use RadixSortLSD;
 use TestBase;
 use KReduce;
 
-config const NINPUTS = 10_000_000;
+config const NINPUTS = 100_000;
 config const MAX_VAL = max(int);
-config const k = 1_000_000;;
+config const kval = 1_000;;
 
-proc testsort(a) {
+proc testsort(a, k) {
   var d: Diags;
 
   d.start();
@@ -16,7 +16,7 @@ proc testsort(a) {
   return (d.elapsed(), res);
 }
 
-proc testheap(a) {
+proc testheap(a,k) {
   var d: Diags;
 
   d.start();
@@ -29,17 +29,24 @@ proc main() {
   var a = makeDistArray(NINPUTS, int);
   fillInt(a, 0, MAX_VAL);
 
-  var (elapsed, res) = testsort(a);
-
-
-
-  var (elapsedHeap, heapRes) = testheap(a);
-
-  assert(heapRes == res);
+  for i in 1..10 {
+    var a = makeDistArray(NINPUTS*i, int);
+    fillInt(a, 0, MAX_VAL);
+    var (elapsed, res) = testsort(a, i*kval);
+    var (elapsedHeap, heapRes) = testheap(a, i*kval);
+    assert(heapRes == res);
+    if(elapsed < elapsedHeap) {
+      writeln("Heap slower for k=",i*kval," and size=",i*NINPUTS);
+    }
+    if i == 5 {
+               writeln("elapsed heap: ", elapsedHeap);
+               writeln("elapsed sort: ", elapsed);
+    }
+  }
 
   
-  const MB:real = byteToMB(NINPUTS*8.0);
+  /*  const MB:real = byteToMB(NINPUTS*8.0);
   if printTimes {
-    writeln("heap implementation on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedHeap, MB/elapsed));
-  }
+  writeln("heap implementation on %i elements (%.1dr MB) in %.2dr seconds (%.2dr MB/s)".format(NINPUTS, MB, elapsedHeap, MB/elapsed));
+  }*/
 }
