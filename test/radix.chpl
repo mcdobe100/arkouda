@@ -38,10 +38,6 @@ proc main() {
     if(elapsed < elapsedHeap) {
       writeln("Heap slower for k=",i*kval," and size=",i*NINPUTS);
     }
-    if i == 5 {
-               writeln("elapsed heap: ", elapsedHeap);
-               writeln("elapsed sort: ", elapsed);
-    }
   }
 
   
