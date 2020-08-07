@@ -10,6 +10,8 @@
 module KReduce {
   use KExtreme;
 
+  const BOUND = 1_000_000;
+
   class kreduce : ReduceScanOp {
     type eltType;
     const k: int;
@@ -94,6 +96,11 @@ module KReduce {
    * elements of an array `arr`
    */
   proc computeInds(arr, kval:int, isMin=true) {
+    if kval > BOUND {
+      var inds = radixSortLSD_ranks(arr);
+      if isMin then return inds[arr.domain.low..#kval];
+      return inds[arr.domain.high-kval..];
+    }
     const extrema = computeExtremaInds(arr, kval, isMin);
     var res = [elem in extrema] elem(1);
     
