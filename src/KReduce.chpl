@@ -96,14 +96,16 @@ module KReduce {
    * elements of an array `arr`
    */
   proc computeInds(arr, kval:int, isMin=true) {
-    if kval > BOUND {
-      var inds = radixSortLSD_ranks(arr);
-      if isMin then return inds[arr.domain.low..#kval];
-      return inds[arr.domain.high-kval..];
-    }
     const extrema = computeExtremaInds(arr, kval, isMin);
     var res = [elem in extrema] elem(1);
     
     return res;
   }
+
+  proc computeIndsSort(arr, kval:int, isMin=true) {
+      var inds = radixSortLSD_ranks(arr);
+      if isMin then return inds[arr.domain.low..#kval];
+      return inds[arr.domain.high-kval..];
+  }
 }
+

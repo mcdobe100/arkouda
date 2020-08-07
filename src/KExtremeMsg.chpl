@@ -67,8 +67,11 @@ module KExtremeMsg
              return s;
             } else {
              var e = toSymEntry(gEnt,real);
-
-             var aV = computeInds(e.a, k:int);
+             var aV;
+             if k:int > 1_000_000 then
+               aV = computeInds(e.a, k:int);
+             else
+               aV = computeIndsSort(e.a, k:int);
 
              st.addEntry(vname, new shared SymEntry(aV));
 
