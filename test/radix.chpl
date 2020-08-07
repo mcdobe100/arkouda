@@ -30,13 +30,17 @@ proc main() {
   fillInt(a, 0, MAX_VAL);
 
   for i in 1..10 {
-    var a = makeDistArray(NINPUTS*i, int);
-    fillInt(a, 0, MAX_VAL);
-    var (elapsed, res) = testsort(a, i*kval);
-    var (elapsedHeap, heapRes) = testheap(a, i*kval);
-    assert(heapRes == res);
-    if(elapsed < elapsedHeap) {
-      writeln("Heap slower for k=",i*kval," and size=",i*NINPUTS);
+    for j in 1..5 {
+      var a = makeDistArray(NINPUTS*i*10, int);
+      fillInt(a, 0, MAX_VAL);
+      var (elapsed, res) = testsort(a, j*10*kval);
+      var (elapsedHeap, heapRes) = testheap(a, j*10*kval);
+      assert(heapRes == res);
+      if(elapsed < elapsedHeap) {
+        writeln("Heap slower for k=",j*10*kval," and size=",i*10*NINPUTS);
+      } else {
+        writeln("heap faster...");
+      }
     }
   }
 
